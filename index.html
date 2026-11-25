@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffe8f0">
+  <title>Маленькое приглашение 💗</title>
+  <style>
+    :root { --pink:#ff7fa8; --deep:#e94f83; --ink:#684653; }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; min-height:100vh; overflow-x:hidden; display:grid; place-items:center; padding:18px;
+      color:var(--ink); font-family:"Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+      background:radial-gradient(circle at 12% 15%,#fff 0 5px,transparent 6px),
+        radial-gradient(circle at 85% 20%,#fff 0 4px,transparent 5px),
+        linear-gradient(145deg,#ffe8f0,#fff2e8 55%,#fce1ef);
+    }
+    .floaties { position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+    .floaties span { position:absolute; bottom:-50px; opacity:.55; animation:floatUp linear infinite; }
+    @keyframes floatUp { to { transform:translateY(-115vh) rotate(25deg); opacity:0; } }
+    .card {
+      width:min(100%,560px); min-height:590px; position:relative; padding:clamp(24px,6vw,42px);
+      border:3px solid #fff; border-radius:34px; background:rgba(255,255,255,.9);
+      box-shadow:0 18px 55px rgba(207,104,141,.18); text-align:center;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .screen { display:none; width:100%; animation:appear .5s ease both; }
+    .screen.active { display:flex; flex-direction:column; align-items:center; }
+    @keyframes appear { from {opacity:0;transform:translateY(12px) scale(.98)} to {opacity:1;transform:none} }
+    .eyebrow { color:var(--deep); font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.78rem; }
+    h1 { font-size:clamp(2rem,8vw,3rem); line-height:1.1; margin:13px 0; color:#d94d7c; }
+    p { font-size:clamp(1rem,4vw,1.15rem); line-height:1.65; margin:9px 0 20px; }
+    .big-heart { font-size:76px; line-height:1.2; filter:drop-shadow(0 8px 5px #ffc4d7); animation:heartbeat 1.4s infinite; }
+    @keyframes heartbeat { 0%,100%{transform:scale(1)} 15%{transform:scale(1.12)} 30%{transform:scale(1)} 45%{transform:scale(1.08)} }
+    button { border:0; border-radius:999px; padding:15px 27px; min-width:145px; font:inherit; font-weight:800; font-size:1rem; cursor:pointer; transition:transform .18s,box-shadow .18s; touch-action:manipulation; }
+    button:active { transform:scale(.96); }
+    .primary { color:white; background:linear-gradient(135deg,#ff8db2,#ec5688); box-shadow:0 8px 18px #f7b2c9; }
+    .primary:hover { box-shadow:0 11px 22px #f2a0bd; transform:translateY(-2px); }
+    .tiny-note { font-size:.82rem; opacity:.7; margin-top:18px; }
+    .name-input { width:min(100%,330px); border:2px solid #ffd0df; border-radius:18px; padding:16px 18px; font:inherit; font-size:1.05rem; color:var(--ink); background:#fffafd; outline:none; text-align:center; margin:8px 0 18px; }
+    .name-input:focus { border-color:#f17ba3; box-shadow:0 0 0 4px #ffe5ee; }
+    .bouquet { position:relative; width:240px; height:220px; margin:0 auto 10px; }
+    .flower { position:absolute; font-size:58px; filter:drop-shadow(0 5px 2px #f7c5d4); animation:bob 2.4s ease-in-out infinite; }
+    .f1{left:20px;top:22px}.f2{left:87px;top:0;animation-delay:.25s}.f3{right:16px;top:26px;animation-delay:.5s}.f4{left:54px;top:77px;animation-delay:.75s}.f5{right:49px;top:82px;animation-delay:1s}
+    .wrap { position:absolute; bottom:2px; left:50%; transform:translateX(-50%); font-size:100px; }
+    @keyframes bob { 50% { translate:0 -7px; } }
+    .cat { font-size:clamp(112px,28vw,155px); line-height:1.35; filter:drop-shadow(0 9px 5px #f7c5d4); animation:bob 2s ease-in-out infinite; }
+    .question { margin-bottom:8px; }
+    .button-zone { position:relative; width:min(100%,350px); height:108px; margin-top:12px; display:flex; align-items:center; justify-content:center; gap:15px; }
+    #noBtn { background:#f5edf0; color:#967783; border:2px solid #f0dce4; position:relative; z-index:2; }
+    #yesBtn { position:relative; z-index:1; }
+    .signature { font-weight:800; color:#d94d7c; margin-top:8px; }
+    .sparkle { font-size:32px; margin:10px 0; }
+    @media(max-width:420px) { .card{min-height:570px;padding:23px 17px}.button-zone{gap:8px}button{min-width:128px;padding:14px 18px} }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important} }
+  </style>
+</head>
+<body>
+  <div class="floaties" aria-hidden="true" id="floaties"></div>
+  <main class="card">
+    <section class="screen active" id="screen1">
+      <div class="big-heart">💗</div>
+      <div class="eyebrow">маленькое сообщение для тебя</div>
+      <h1>Привет, красавица!</h1>
+      <p>Подскажите, пожалуйста…<br><strong>как вас зовут?</strong> 🥺</p>
+      <form id="nameForm" style="width:100%;display:flex;flex-direction:column;align-items:center">
+        <input class="name-input" id="herNameInput" type="text" maxlength="24" placeholder="Твоё прекрасное имя..." autocomplete="given-name" required>
+        <button class="primary" type="submit">Представиться 💌</button>
+      </form>
+      <div class="tiny-note">Обещаю, дальше будет кое-что милое</div>
+    </section>
+
+    <section class="screen" id="screen2">
+      <div class="eyebrow">это тебе, <span class="herName">красавица</span></div>
+      <h1>Небольшой букетик 🌷</h1>
+      <div class="bouquet" aria-label="Мультяшный букет цветов">
+        <span class="flower f1">🌸</span><span class="flower f2">🌷</span><span class="flower f3">🌼</span>
+        <span class="flower f4">🌺</span><span class="flower f5">🌷</span><span class="wrap">💐</span>
+      </div>
+      <p>Дарю тебе этот виртуальный букет от всей души.<br><strong>Улыбайся — мне очень нравится, когда ты улыбаешься. 💗</strong></p>
+      <button class="primary" onclick="showScreen(3)">Дальше →</button>
+    </section>
+
+    <section class="screen" id="screen3">
+      <div class="eyebrow">и ещё кое-кто для тебя</div>
+      <div class="cat" role="img" aria-label="Котик с букетом">🐱💐</div>
+      <h1><span class="herName">Красавица</span>, это ты! 💕</h1>
+      <p>Милая, очаровательная и заслуживающая целый миллион цветов. 🥹</p>
+      <button class="primary" onclick="showScreen(4)">Как мило! →</button>
+    </section>
+
+    <section class="screen" id="screen4">
+      <div class="big-heart">🥰</div>
+      <div class="eyebrow">и вот мой вопрос</div>
+      <h1 class="question"><span class="herName">Красавица</span>, пойдёшь со мной на свидание?</h1>
+      <p>Обещаю хорошее настроение и приятный вечер ✨</p>
+      <div class="button-zone" id="buttonZone">
+        <button class="primary" id="yesBtn" onclick="showScreen(5)">ДА! ❤️</button>
+        <button id="noBtn" type="button">Нет 🙈</button>
+      </div>
+      <div class="tiny-note">Подумай хорошенько… хотя кнопка уже всё решила 😄</div>
+    </section>
+
+    <section class="screen" id="screen5">
+      <div class="big-heart">💖</div>
+      <div class="eyebrow">урааа, <span class="herName">красавица</span>!</div>
+      <h1>Это прекрасно!</h1>
+      <p><strong>Я очень рад! ❤️</strong><br>Люблю, когда ты улыбаешься, и уже с нетерпением жду нашей встречи.</p>
+      <div class="sparkle">✨ 🌷 ✨</div>
+      <p>Хорошего тебе вечера!</p>
+      <div class="signature">С теплом, Олег 💌</div>
+    </section>
+  </main>
+
+  <script>
+    let herName = "";
+    document.getElementById("nameForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const value = document.getElementById("herNameInput").value.trim();
+      if (!value) return;
+      herName = value;
+      document.querySelectorAll(".herName").forEach(el => el.textContent = herName);
+      showScreen(2);
+    });
+
+    function showScreen(number) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("screen" + number).classList.add("active");
+    }
+
+    const floaties = document.getElementById("floaties");
+    const hearts = ["💗", "💕", "💖", "♡", "💘"];
+    for (let i = 0; i < 17; i++) {
+      const item = document.createElement("span");
+      item.textContent = hearts[i % hearts.length];
+      item.style.left = (Math.random() * 100) + "%";
+      item.style.animationDuration = (8 + Math.random() * 9) + "s";
+      item.style.animationDelay = (-Math.random() * 15) + "s";
+      item.style.fontSize = (16 + Math.random() * 20) + "px";
+      floaties.appendChild(item);
+    }
+
+    const noBtn = document.getElementById("noBtn");
+    const zone = document.getElementById("buttonZone");
+    function dodgeNo() {
+      const zoneRect = zone.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = Math.max(0, (zoneRect.width - btnRect.width) / 2 - 3);
+      const maxY = Math.max(0, (zoneRect.height - btnRect.height) / 2 - 3);
+      const x = (Math.random() * 2 - 1) * maxX;
+      const y = (Math.random() * 2 - 1) * maxY;
+      noBtn.style.position = "absolute";
+      noBtn.style.left = "50%";
+      noBtn.style.top = "50%";
+      noBtn.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+    }
+    noBtn.addEventListener("pointerenter", dodgeNo);
+    noBtn.addEventListener("pointerdown", event => { event.preventDefault(); dodgeNo(); });
+    noBtn.addEventListener("click", dodgeNo);
+  </script>
+</body>
+</html>
